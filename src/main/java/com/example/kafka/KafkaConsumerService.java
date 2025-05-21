@@ -8,6 +8,7 @@ import io.smallrye.common.annotation.Blocking;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.jboss.logging.Logger;
 
@@ -19,9 +20,11 @@ public class KafkaConsumerService {
     EntityManager entityManager;
     ObjectMapper objectMapper = new ObjectMapper();
 
-    @Incoming("input-topic")
+    @Incoming("my-input-topic")
     @Blocking
+    @Transactional
     public void consume(String data) throws JsonProcessingException {
+        LOG.info("masuk");
         // Deserialize ke DTO
         MessageDTO messageDTO = objectMapper.readValue(data, MessageDTO.class);
 
